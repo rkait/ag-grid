@@ -251,10 +251,9 @@ export class RowNode {
         }
 
         if (rangeSelect) {
-            var rowModelNormal = this.rowModel.getType()===Constants.ROW_MODEL_TYPE_NORMAL;
             var newRowClicked = this.selectionController.getLastSelectedNode() !== this;
             var allowMultiSelect = this.gridOptionsWrapper.isRowSelectionMulti();
-            if (rowModelNormal && newRowClicked && allowMultiSelect) {
+            if (newRowClicked && allowMultiSelect) {
                 this.doRowRangeSelection();
                 return;
             }
@@ -304,8 +303,9 @@ export class RowNode {
 
         var groupsSelectChildren = this.gridOptionsWrapper.isGroupSelectsChildren();
 
-        var inMemoryRowModel = <InMemoryRowModel> this.rowModel;
-        inMemoryRowModel.forEachNodeAfterFilterAndSort( (rowNode: RowNode) => {
+        var rowModelNormal = this.rowModel.getType() === Constants.ROW_MODEL_TYPE_NORMAL;
+        var iterator = rowModelNormal ? 'forEachNodeAfterFilterAndSort' : 'forEachNode';
+        this.rowModel[iterator]( (rowNode: RowNode) => {
 
             var lookingForLastRow = firstRowHit && !lastRowHit;
 

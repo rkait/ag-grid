@@ -8854,10 +8854,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return;
 	        }
 	        if (rangeSelect) {
-	            var rowModelNormal = this.rowModel.getType() === constants_1.Constants.ROW_MODEL_TYPE_NORMAL;
 	            var newRowClicked = this.selectionController.getLastSelectedNode() !== this;
 	            var allowMultiSelect = this.gridOptionsWrapper.isRowSelectionMulti();
-	            if (rowModelNormal && newRowClicked && allowMultiSelect) {
+	            if (newRowClicked && allowMultiSelect) {
 	                this.doRowRangeSelection();
 	                return;
 	            }
@@ -8896,8 +8895,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var lastRowHit = false;
 	        var lastRow;
 	        var groupsSelectChildren = this.gridOptionsWrapper.isGroupSelectsChildren();
-	        var inMemoryRowModel = this.rowModel;
-	        inMemoryRowModel.forEachNodeAfterFilterAndSort(function (rowNode) {
+
+	        var rowModelNormal = this.rowModel.getType() === constants_1.Constants.ROW_MODEL_TYPE_NORMAL;
+	        var iterator = rowModelNormal ? 'forEachNodeAfterFilterAndSort' : 'forEachNode';
+	        this.rowModel[iterator](function (rowNode) {
 	            var lookingForLastRow = firstRowHit && !lastRowHit;
 	            // check if we need to flip the select switch
 	            if (!firstRowHit) {
